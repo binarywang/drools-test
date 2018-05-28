@@ -3,12 +3,14 @@ package com.binarywang.controller;
 import javax.annotation.Resource;
 
 import org.kie.api.runtime.KieSession;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.binarywang.model.Address;
 import com.binarywang.model.fact.AddressCheckResult;
+import com.binarywang.util.KieUtils;
+import com.binarywang.util.ReloadRuleUtils;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <pre>
@@ -18,16 +20,17 @@ import com.binarywang.model.fact.AddressCheckResult;
  *
  * @author <a href="https://github.com/binarywang">Binary Wang</a>
  */
+@Slf4j
+@RestController
 @RequestMapping("/test")
-@Controller
 public class TestController {
-
   @Resource
-  private KieSession kieSession;
+  private ReloadRuleUtils reloadRuleUtils;
 
-  @ResponseBody
   @RequestMapping("/address")
-  public void test() {
+  public String test() {
+    KieSession kieSession = KieUtils.getKieSession();
+
     Address address = new Address();
     address.setPostcode("99425");
 
@@ -35,11 +38,18 @@ public class TestController {
     kieSession.insert(address);
     kieSession.insert(result);
     int ruleFiredCount = kieSession.fireAllRules();
-    System.out.println("触发了" + ruleFiredCount + "条规则");
+    log.info("触发了" + "条规则" + ruleFiredCount);
 
     if (result.isPostCodeResult()) {
-      System.out.println("规则校验通过");
+      log.info("规则校验通过");
     }
 
+    return "nice";
+  }
+
+  @RequestMapping("/reload")
+  public String reload() {
+    reloadRuleUtils.reload();
+    return "ok";
   }
 }

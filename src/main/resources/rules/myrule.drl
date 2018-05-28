@@ -4,7 +4,6 @@ import com.binarywang.model.Address;
 import com.binarywang.model.fact.AddressCheckResult;
 
 rule "Postcode should be filled with exactly 5 numbers"
-
     when
         address : Address(postcode != null, postcode matches "([0-9]{5})")
         checkResult : AddressCheckResult();
