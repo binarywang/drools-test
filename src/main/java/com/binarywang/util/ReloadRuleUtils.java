@@ -29,7 +29,7 @@ public class ReloadRuleUtils {
     Results results = kieBuilder.getResults();
     if (results.hasMessages(Message.Level.ERROR)) {
       log.info(results.getMessages().toString());
-      throw new IllegalStateException("### errors ###");
+      throw new IllegalStateException(results.getMessages().toString());
     }
 
     KieUtils.setKieContainer(kieServices.newKieContainer(kieServices.getRepository().getDefaultReleaseId()));
@@ -37,7 +37,7 @@ public class ReloadRuleUtils {
   }
 
   private String loadRules() {
-    // 从数据库加载的规则
+    //加载动态规则
     return "package address\n\n " +
         "import com.binarywang.model.Address;\n " +
         "import com.binarywang.model.fact.AddressCheckResult;\n" +

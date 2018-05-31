@@ -1,8 +1,7 @@
 package com.binarywang.controller;
 
-import javax.annotation.Resource;
-
 import org.kie.api.runtime.KieSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,11 +23,15 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/test")
 public class TestController {
-  @Resource
   private ReloadRuleUtils reloadRuleUtils;
 
+  @Autowired
+  public TestController(ReloadRuleUtils reloadRuleUtils) {
+    this.reloadRuleUtils = reloadRuleUtils;
+  }
+
   @RequestMapping("/address")
-  public String test() {
+  public String address() {
     KieSession kieSession = KieUtils.getKieSession();
 
     Address address = new Address();
@@ -38,10 +41,10 @@ public class TestController {
     kieSession.insert(address);
     kieSession.insert(result);
     int ruleFiredCount = kieSession.fireAllRules();
-    log.info("触发了" + "条规则" + ruleFiredCount);
+    log.info(Thread.currentThread().getId() + " 触发了" + "条规则" + ruleFiredCount);
 
     if (result.isPostCodeResult()) {
-      log.info("规则校验通过");
+      log.info(Thread.currentThread().getId() + "规则校验通过");
     }
 
     return "nice";
