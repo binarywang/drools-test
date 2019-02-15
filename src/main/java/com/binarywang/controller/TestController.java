@@ -41,10 +41,10 @@ public class TestController {
     kieSession.insert(address);
     kieSession.insert(result);
     int ruleFiredCount = kieSession.fireAllRules();
-    log.info(Thread.currentThread().getId() + " 触发了" + "条规则" + ruleFiredCount);
+    log.info(Thread.currentThread()  + "== 触发了" + "条规则" + ruleFiredCount);
 
     if (result.isPostCodeResult()) {
-      log.info(Thread.currentThread().getId() + "规则校验通过");
+      log.info(Thread.currentThread()  + "=== 规则校验通过");
     }
 
     return "nice";

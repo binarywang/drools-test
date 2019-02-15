@@ -19,7 +19,7 @@ import io.restassured.module.mockmvc.RestAssuredMockMvc;
  * @author <a href="https://github.com/binarywang">Binary Wang</a>
  */
 public class TestControllerTest {
-  @BeforeTest
+  @BeforeClass
   public void init() throws IOException {
     new DroolsAutoConfiguration().kieContainer();
 
@@ -27,9 +27,9 @@ public class TestControllerTest {
     RestAssuredMockMvc.resultHandlers(MockMvcResultHandlers.print());
   }
 
-  @Test(invocationCount = 100,threadPoolSize = 5)
+  @Test(invocationCount = 100, threadPoolSize = 5)
   public void testAddress() {
-    System.out.println(Thread.currentThread().getId() + "------------------");
+    System.out.println(Thread.currentThread()  + "------------------");
     RestAssuredMockMvc.given()
         .post("/test/address")
         .then().log().everything()
